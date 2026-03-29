@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
         
         // : 3. Main Color Scheme
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFBC00E),
+          primary: Color(0xFFFCCC3E),
           secondary: Color(0xFF0A2463),
           tertiary: Color(0xFECECECE),
           surface: Color(0xFF212121),
