@@ -23,32 +23,31 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
 
   Future<void> _fetchItems() async {
     try {
-      // Traemos los materiales filtrados por el proyecto actual
       final response = await _supabase
-          .from('materials') // Asegúrate de que el nombre de la tabla coincida
+          .from('products') // Asegúrate de que el nombre de la tabla coincida
           .select()
-          .eq('project_id', widget.projectId);
+          .eq('id_location', widget.projectId);
 
       setState(() {
         _items = response;
         _isLoading = false;
       });
     } catch (e) {
-      print('Error cargando materiales: $e');
+      // print('✖️Error cargando materiales: $e');
       setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // 1. Estado de carga
+    // - 1. Loading State
     if (_isLoading) {
       return const Expanded(
         child: Center(child: CircularProgressIndicator(color: Colors.amber)),
       );
     }
 
-    // 2. Si no hay materiales en este proyecto
+    // - 2. If no items are found
     if (_items.isEmpty) {
       return const Expanded(
         child: Center(
@@ -60,10 +59,10 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
       );
     }
 
-    // 3. El contenedor de la lista real
+    // - 3. The actual list container
     return Expanded(
       child: Container(
-        color: const Color(0xFF151515), // Fondo negro principal
+        color: const Color(0xFF151515), 
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 10),
           itemCount: _items.length,
@@ -73,7 +72,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
             return MaterialItemCard(
               name: item['name'] ?? 'Material sin nombre',
               quantity: item['quantity'] ?? 0,
-              unit: item['unit_type'] ?? 'ud',
+              unit: item['unit_measurement'] ?? 'ud',
               // Lógica simple para el color de categoría
               categoryColor: _getCategoryColor(item['category']),
               onEdit: () {
@@ -95,11 +94,13 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
   Color _getCategoryColor(String? category) {
     switch (category?.toLowerCase()) {
       case 'herramienta':
-        return Colors.red;
-      case 'consumible':
-        return Colors.blue;
+        return Color(0xFFFF0004);
+      case 'fontaneria':
+        return Color(0xFF36BCFF);
       case 'electrico':
-        return Colors.amber;
+        return Color(0xFFFFEA00);
+      case 'material':
+        return Color(0xFFC1C1C1);
       default:
         return Colors.teal; // Tu turquesa para el resto
     }

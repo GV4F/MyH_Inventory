@@ -20,13 +20,15 @@ class MaterialItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       child: IntrinsicHeight( // Hace que los hijos tengan la misma altura
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 1. Barra de Categoría (Variable)
+            // - 1. Var of category color (Vertical)
             Container(
               width: 6,
               decoration: BoxDecoration(
@@ -41,7 +43,7 @@ class MaterialItemCard extends StatelessWidget {
             // 2. Contenido Central
             Expanded(
               child: Container(
-                color: const Color(0xFF212121), // Tu gris de superficie
+                color: colors.surface, 
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +51,8 @@ class MaterialItemCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colors.tertiary,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
@@ -58,7 +60,7 @@ class MaterialItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Unidad: $quantity $unit',
+                      '$unit: $quantity',
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
