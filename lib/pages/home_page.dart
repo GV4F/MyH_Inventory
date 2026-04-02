@@ -14,8 +14,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0x12121212),
+      backgroundColor: colors.onSurface,
       body: Column(
         children: [
           // - Header Main

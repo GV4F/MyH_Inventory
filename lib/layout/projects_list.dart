@@ -26,7 +26,8 @@ class _ProjectsListSectionState extends State<ProjectsListSection> {
     try {
       final response = await _supabase
           .from('locations')
-          .select();
+          .select()
+          .order('priority', ascending: true);
 
       setState(() {
         activeProjects = response as List<dynamic>;
@@ -42,40 +43,18 @@ class _ProjectsListSectionState extends State<ProjectsListSection> {
 @override
 Widget build(BuildContext context) {
 
+  final colors = Theme.of(context).colorScheme;
+  
   // ! Debugging: Print the loading state and the number of projects fetched
     if (isLoading) {
       return const Center(child: CircularProgressIndicator(color: Colors.amber));
     }
 
     return Container(
-      color: const Color(0x12121222), 
+      color: colors.onSurface, 
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         children: [
-          // --- Fixed links ---
-          ProjectLink(
-            title: 'Bodega Salamá',
-            isPrimary: true,
-            leftIcon: Icons.home_work_outlined,
-            onTap: () {
-              // Lógica de navegación
-            },
-          ),
-          const SizedBox(height: 12.0),
-          ProjectLink(
-            title: 'Bodega Santa Bárbara',
-            isPrimary: true, 
-            leftIcon: Icons.warehouse_outlined,
-            onTap: () {
-              // Lógica de navegación
-            },
-          ),
-          
-          const SizedBox(height: 24.0), // Separador visual
-          
-          // ---  Dynamic links ---
-          //- We use the operator spread (...) to insert a list of widgets generated from the activeProjects list.
-
           ...activeProjects.map((project) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -84,6 +63,8 @@ Widget build(BuildContext context) {
                 onTap: () {
                   context.push('/project/${project['id']}');
                 },
+                isPrimary: project['category'] == 'Bodega',
+                leftIcon: project['category'] == 'Bodega' ? Icons.warehouse_rounded : null,
               ),
             );
           }),

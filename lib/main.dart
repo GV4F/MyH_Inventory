@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
 
       theme: ThemeData(
         brightness: Brightness.dark, 
-        scaffoldBackgroundColor: const Color(0x12121212), 
+        scaffoldBackgroundColor: const Color(0xFF121212), 
         
         // : 3. Main Color Scheme
         colorScheme: const ColorScheme.dark(
@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
           secondary: Color(0xFF0A2463),
           tertiary: Color(0xFECECECE),
           surface: Color(0xFF212121),
+          onSurface: Color(0xFF121212),
         ),
         fontFamily: 'Montserrat',
       ),
