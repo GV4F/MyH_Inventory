@@ -1,18 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'project_link.dart';
 
-class ProjectsListSection extends StatelessWidget {
-  // Simulando el estado de los proyectos que irás agregando/quitando.
-  // Más adelante esto vendrá de un estado global o una base de datos.
-  final List<String> activeProjects = [
-    'Plaza Comercial: Granados',
-    'Casa de 2 niveles: El Valle Salamá',
-  ];
-
-  ProjectsListSection({super.key});
+class ProjectsListSection extends StatefulWidget {
+  const ProjectsListSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<ProjectsListSection> createState() => _ProjectsListSectionState();
+}
+class _ProjectsListSectionState extends State<ProjectsListSection> {
+  final _supabase = Supabase.instance.client;
+
+  List<dynamic> activeProjects = [];
+  bool isLoading = true;
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchActiveProjects();
+  }
+
+  Future<void> _fetchActiveProjects() async {
+    try {
+      final response = await _supabase
+          .from('locations')
+          .select();
+
+      setState(() {
+        activeProjects = response as List<dynamic>;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching projects: $e';
+        isLoading = false;
+      });
+    }
+}
+@override
+Widget build(BuildContext context) {
+
+  // ! Debugging: Print the loading state and the number of projects fetched
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator(color: Colors.amber));
+    }
+
     return Container(
       color: const Color(0x12121222), 
       child: ListView(
@@ -41,13 +75,14 @@ class ProjectsListSection extends StatelessWidget {
           
           // ---  Dynamic links ---
           //- We use the operator spread (...) to insert a list of widgets generated from the activeProjects list.
-          ...activeProjects.map((projectName) {
+
+          ...activeProjects.map((project) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
               child: ProjectLink(
-                title: projectName,
+                title: project['name'],
                 onTap: () {
-                  // Aquí pasarías el ID o nombre del proyecto a la siguiente pantalla
+                  context.push('/project/${project['id']}');
                 },
               ),
             );

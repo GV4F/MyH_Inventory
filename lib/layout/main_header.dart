@@ -81,13 +81,10 @@ class MainHeader extends StatelessWidget {
               height: 48.0,
               decoration: BoxDecoration(
                 color: Colors.black.withValues(alpha: 0.3), 
-                // shape: BoxShape.circle,
               ),
-              // - Insert the logo widget or a placeholder icon if none is provided
-              child: Center(
-                child: const Icon(
-                  Icons.image,
-                  color: Colors.white70,
+              child: ClipOval(
+                child: Center(
+                  child: SizedBox(width: 38.0, height: 38.0, child: logoWidget),
                 ),
               ),
             ),
