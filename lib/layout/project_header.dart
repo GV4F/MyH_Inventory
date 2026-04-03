@@ -24,6 +24,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true, // Para que el modal pueda ocupar más espacio si es necesario
       backgroundColor: Colors.transparent, // Para poder redondear las esquinas desde el Container
       builder: (BuildContext context) {
@@ -134,7 +135,6 @@ class _HeaderSectionState extends State<ProjectHeader> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       ),
                       onChanged: (value) {
-                        // Aquí disparas la función para filtrar tu lista
                         print('Buscando: $value');
                       },
                     ),
@@ -143,7 +143,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
                 
                 const SizedBox(width: 12),
                 
-                // Botón de filtro
+                // Filter Button
                 GestureDetector(
                   onTap: _showFilterModal,
                   child: Container(
@@ -154,7 +154,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
-                      Icons.tune, // Icono de sliders
+                      Icons.tune, 
                       color: Colors.amber,
                       size: 26,
                     ),

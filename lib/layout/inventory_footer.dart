@@ -22,8 +22,8 @@ class InventoryFooter extends StatelessWidget {
     return Container(
   
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: const BoxDecoration(
-        color: Color(0xFF313131),
+      decoration: BoxDecoration(
+        color: colors.surface,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(32.0),
         ),
