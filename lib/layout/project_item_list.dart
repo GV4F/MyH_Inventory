@@ -43,6 +43,12 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
   }
 
   @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     // - 1. Loading State
     if (_isLoading) {

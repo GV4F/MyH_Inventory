@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'project_link.dart';
+import 'dart:async';
 
 class ProjectsListSection extends StatefulWidget {
   const ProjectsListSection({super.key});
@@ -10,6 +11,7 @@ class ProjectsListSection extends StatefulWidget {
   State<ProjectsListSection> createState() => _ProjectsListSectionState();
 }
 class _ProjectsListSectionState extends State<ProjectsListSection> {
+  StreamSubscription? _subscription;
   final _supabase = Supabase.instance.client;
 
   List<dynamic> activeProjects = [];
@@ -19,20 +21,23 @@ class _ProjectsListSectionState extends State<ProjectsListSection> {
   @override
   void initState() {
     super.initState();
-    _fetchActiveProjects();
+    _startListeningProjects();
   }
 
-  Future<void> _fetchActiveProjects() async {
-    try {
-      final response = await _supabase
-          .from('locations')
-          .select()
-          .order('priority', ascending: true);
+  void _startListeningProjects() {
+    _subscription?.cancel(); // : We cancel any existing subscription before starting a new one
 
-      setState(() {
-        activeProjects = response as List<dynamic>;
-        isLoading = false;
-      });
+    try {
+      _subscription = _supabase
+          .from('locations')
+          .stream(primaryKey: ['id'])
+          .order('priority', ascending: true)
+          .listen((data) {
+            setState(() {
+              activeProjects = data;
+              isLoading = false;
+            });
+          });
     } catch (e) {
       setState(() {
         errorMessage = 'Error fetching projects: $e';
@@ -40,6 +45,13 @@ class _ProjectsListSectionState extends State<ProjectsListSection> {
       });
     }
 }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+  
 @override
 Widget build(BuildContext context) {
 
@@ -63,8 +75,8 @@ Widget build(BuildContext context) {
                 onTap: () {
                   context.push('/project/${project['id']}');
                 },
-                isPrimary: project['category'] == 'Bodega',
-                leftIcon: project['category'] == 'Bodega' ? Icons.warehouse_rounded : null,
+                isPrimary: project['priority'] == 1,
+                leftIcon: project['priority'] == 1 ? Icons.warehouse_rounded : null,
               ),
             );
           }),
