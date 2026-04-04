@@ -110,8 +110,13 @@ class _MainLayoutState extends State<MainLayout> {
         setState(() { _isSaving = false; });
         Navigator.pop(context);
       }
+      _nameObject.clear();
+      _categoryObject.clear();
+      _quantityObject.clear();
+      _unitMeasurement.clear();
     }
   }
+
   void _showAddProjectForm() {
     showModalBottomSheet(
       context: context, 

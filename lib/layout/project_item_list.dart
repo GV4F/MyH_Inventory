@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'project_item.dart'; 
+import 'dart:async';
+
 class ItemsListContainer extends StatefulWidget {
   final String projectId;
 
@@ -11,6 +13,7 @@ class ItemsListContainer extends StatefulWidget {
 }
 
 class _ItemsListContainerState extends State<ItemsListContainer> {
+  StreamSubscription? _subscription;
   final _supabase = Supabase.instance.client;
   List<dynamic> _items = [];
   bool _isLoading = true;
@@ -18,22 +21,23 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
   @override
   void initState() {
     super.initState();
-    _fetchItems();
+    _startListening();
   }
 
-  Future<void> _fetchItems() async {
+  void _startListening() {
+    _subscription?.cancel(); // : We cancel any existing subscription before starting a new one
     try {
-      final response = await _supabase
+        _subscription = _supabase
           .from('products')
-          .select()
-          .eq('id_location', widget.projectId);
-
-      setState(() {
-        _items = response;
-        _isLoading = false;
-      });
+          .stream(primaryKey: ['id'])
+          .eq('id_location', widget.projectId)
+          .listen((data) {
+            setState(() {
+              _items = data;
+              _isLoading = false;
+            });
+          });
     } catch (e) {
-      // print('✖️Error cargando materiales: $e'); 
       setState(() => _isLoading = false);
     }
   }
@@ -95,7 +99,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
     switch (category?.toLowerCase()) {
       case 'herramienta':
         return Color(0xFFFF0004);
-      case 'fontaneria':
+      case 'fontanería':
         return Color(0xFF36BCFF);
       case 'electrico':
         return Color(0xFFFFEA00);
