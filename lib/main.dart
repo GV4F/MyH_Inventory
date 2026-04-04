@@ -26,7 +26,10 @@ class MainApp extends StatelessWidget {
 
       theme: ThemeData(
         brightness: Brightness.dark, 
-        scaffoldBackgroundColor: const Color(0xFF121212), 
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        snackBarTheme: const SnackBarThemeData(
+          contentTextStyle: TextStyle(color: Color(0xFFFCCC3E)),
+        ),
         
         // : 3. Main Color Scheme
         colorScheme: const ColorScheme.dark(

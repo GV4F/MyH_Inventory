@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 // * LAYOUTS
 import '../layout/inventory_footer.dart';
 
@@ -13,6 +14,57 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
+  final _supabase = Supabase.instance.client;
+  final TextEditingController _nameProject = TextEditingController();
+  final TextEditingController _categoryProject = TextEditingController();
+  final TextEditingController _descriptionProject = TextEditingController();
+  bool _isSaving = false;
+
+  @override
+  void dispose() {
+    _nameProject.dispose();
+    _categoryProject.dispose();
+    _descriptionProject.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pushData() async {
+    setState(() { _isSaving = true; });
+    try {
+      final name = _nameProject.text.trim();
+      final category = _categoryProject.text.trim();
+      final description = _descriptionProject.text.trim();
+
+      if (name.isEmpty || category.isEmpty || description.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Por favor, completa todos los campos.', style: TextStyle(color: Colors.redAccent)),
+          )
+        );
+        return;
+      }
+      
+      await _supabase.from('locations').insert({
+        'name': name,
+        'category': category,
+        'description': description,
+      });
+
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Proyecto aportado exitosamente!'))
+        );
+      }
+
+    } catch (e) {
+      print('Error inserting data: $e');
+    } finally {
+      if(mounted) {
+        setState(() { _isSaving = false; });
+        Navigator.pop(context);
+      }
+    }
+  }
   
   void _showAddProjectForm() {
     showModalBottomSheet(
@@ -21,7 +73,7 @@ class _MainLayoutState extends State<MainLayout> {
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.7, //: 70% of screen height
+          height: MediaQuery.of(context).size.height * 0.9, //: 90% of screen height
           decoration: const BoxDecoration(
             color: Color(0xFF151515),
             borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
@@ -38,13 +90,14 @@ class _MainLayoutState extends State<MainLayout> {
               ),
               const SizedBox(height: 24.0),
               const Text(
-                'Add New Project',
+                'Añadir nuevo Proyecto',
                 style: TextStyle(color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24.0),
               
               // --- Here go your form fields ---
-              const TextField(
+              TextField(
+                controller: _nameProject,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Project Name',
@@ -53,18 +106,38 @@ class _MainLayoutState extends State<MainLayout> {
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
                 ),
               ),
-              
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _categoryProject,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _descriptionProject,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+                ),
+              ),
+
               const Spacer(), // : Pushes the button to the bottom
-              
+
               // : Button to submit
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // : Close the modal
-                  },
+                  onPressed: _isSaving ? null : _pushData,
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-                  child: const Text('Add Project', style: TextStyle(color: Colors.black)),
+                  child: const Text('Añadir', style: TextStyle(color: Colors.black)),
                 ),
               )
             ],
