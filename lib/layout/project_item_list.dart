@@ -24,7 +24,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
   Future<void> _fetchItems() async {
     try {
       final response = await _supabase
-          .from('products') // Asegúrate de que el nombre de la tabla coincida
+          .from('products')
           .select()
           .eq('id_location', widget.projectId);
 
@@ -33,7 +33,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
         _isLoading = false;
       });
     } catch (e) {
-      // print('✖️Error cargando materiales: $e');
+      // print('✖️Error cargando materiales: $e'); 
       setState(() => _isLoading = false);
     }
   }
