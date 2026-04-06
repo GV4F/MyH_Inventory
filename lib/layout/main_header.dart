@@ -77,10 +77,10 @@ class MainHeader extends StatelessWidget {
             
             // - Right Section: Circular logo container
             Container(
-              width: 48.0,
-              height: 48.0,
+              width: 50.0,
+              height: 50.0,
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3), 
+                color: Colors.transparent, 
               ),
               child: ClipOval(
                 child: Center(
