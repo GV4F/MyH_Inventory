@@ -13,6 +13,8 @@ class ProjectHeader extends StatefulWidget {
 
 class _HeaderSectionState extends State<ProjectHeader> {
   final TextEditingController _searchController = TextEditingController();
+  final List<String> _categories = ['Todo', 'Herramienta', 'Material', 'Fontanería', 'Electricidad', 'Maquinaria'];
+  String _selectedCategory = 'Todo';
 
   @override
   void dispose() {
@@ -20,22 +22,21 @@ class _HeaderSectionState extends State<ProjectHeader> {
     super.dispose();
   }
 
-  // Función que levanta el modal de filtros
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
-      isScrollControlled: true, // Para que el modal pueda ocupar más espacio si es necesario
-      backgroundColor: Colors.transparent, // Para poder redondear las esquinas desde el Container
+      isScrollControlled: true, 
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24.0),
           decoration: const BoxDecoration(
-            color: Color(0xFF212121), // El gris oscuro de tus tarjetas
+            color: Color(0xFF212121),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Se ajusta al contenido
+            mainAxisSize: MainAxisSize.min, 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -46,7 +47,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Color(0xFFFCCC3E),
                     ),
                   ),
                   IconButton(
@@ -56,9 +57,70 @@ class _HeaderSectionState extends State<ProjectHeader> {
                 ],
               ),
               const SizedBox(height: 20),
-              // Aquí irán tus opciones de filtro (ej. Dropdowns, Checkboxes)
-              const Text('Categorías...', style: TextStyle(color: Colors.white70)),
-              const SizedBox(height: 60), // Espacio de relleno temporal
+              const Divider(color: Colors.white12),
+              const Text(
+                'Categorías:',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white70,
+                ),
+              ),
+              Wrap(
+                  spacing: 10.0, 
+                  runSpacing: 10.0, 
+                  children: _categories.map((category) {
+                    final isSelected = _selectedCategory == category;
+                    return ChoiceChip(
+                      label: Text(category),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          _selectedCategory = selected ? category : 'Todo';
+                        });
+                      },
+                      backgroundColor: const Color(0xFF333333),
+                      selectedColor: const Color(0xFFFCCC3E), 
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: isSelected ? const Color(0xFFFCCC3E) : Colors.transparent, 
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: isSelected ? const Color(0xFF121212) : Colors.white70,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _selectedCategory;
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFCCC3E), 
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Aplicar Filtro',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF121212),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         );
