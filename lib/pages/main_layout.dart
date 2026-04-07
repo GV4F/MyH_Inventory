@@ -264,7 +264,7 @@ class _MainLayoutState extends State<MainLayout> {
               // : Unit of Measurement Dropdown
               DropdownButtonFormField<String>(
                 initialValue: _unitMeasurement.text.isEmpty ? null : _unitMeasurement.text,
-                items: ['Metro Cúbico', 'Metro Cuadrado', 'Unidad', 'Ciento', 'Libra', 'Quintal', 'Otra'].map((category) {
+                items: ['Metro Cúbico', 'Metro Cuadrado', 'Metro', 'Ciento', 'Libra', 'Quintal', 'Unidad','Otra'].map((category) {
                   return DropdownMenuItem<String>(
                     value: category,
                     child: Text(category, style: TextStyle(color: Colors.white)),

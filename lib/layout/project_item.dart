@@ -24,7 +24,7 @@ class MaterialItemCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-      child: IntrinsicHeight( // Hace que los hijos tengan la misma altura
+      child: IntrinsicHeight( // : Makes the card take the height of its tallest child
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -40,7 +40,7 @@ class MaterialItemCard extends StatelessWidget {
               ),
             ),
 
-            // 2. Contenido Central
+            // - 2. Center content (Name + Quantity)
             Expanded(
               child: Container(
                 color: colors.surface, 
@@ -71,31 +71,40 @@ class MaterialItemCard extends StatelessWidget {
               ),
             ),
 
-            // 3. Botón EDIT (Vertical)
-            Material(
-              color: const Color(0xFFFFC107), // Tu amarillo primario
-              child: InkWell(
-                onTap: onEdit,
-                child: const SizedBox(
-                  width: 40,
-                  child: Center(
-                    child: Icon(Icons.edit, color: Colors.black, size: 20),
+            // - 3. Button section
+            SizedBox(
+              width: 40,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // : Top button: Edit
+                  Expanded(
+                    child: Material(
+                      borderRadius: BorderRadius.circular(4),
+                      color: colors.primary,
+                      child: InkWell(
+                        onTap: onEdit,
+                        child: const Center(
+                          child: Icon(Icons.edit_note_rounded, color: Colors.black, size: 20),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
 
-            // 4. Botón MORE (Vertical)
-            Material(
-              color: const Color(0xFF333333), // Gris oscuro para diferenciar
-              child: InkWell(
-                onTap: onMore,
-                child: const SizedBox(
-                  width: 40,
-                  child: Center(
-                    child: Icon(Icons.more_vert, color: Colors.white, size: 20),
+                  // : Bottom button: MORE
+                  Expanded(
+                    child: Material(
+                      borderRadius: BorderRadius.circular(4),
+                      color: colors.secondary, 
+                      child: InkWell(
+                        onTap: onMore,
+                        child: const Center(
+                          child: Icon(Icons.pending, color: Colors.white, size: 20),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

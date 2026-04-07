@@ -83,7 +83,6 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
               name: item['name'] ?? 'Material sin nombre',
               quantity: item['quantity'] ?? 0,
               unit: item['unit_measurement'] ?? 'ud',
-              // Lógica simple para el color de categoría
               categoryColor: _getCategoryColor(item['category']),
               onEdit: () {
                 print('Editando: ${item['name']}');
@@ -107,7 +106,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
         return Color(0xFFFF0004);
       case 'fontanería':
         return Color(0xFF36BCFF);
-      case 'electrico':
+      case 'electricidad':
         return Color(0xFFFFEA00);
       case 'material':
         return Color(0xFFC1C1C1);
