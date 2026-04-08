@@ -77,6 +77,7 @@ class _MoveItemModalState extends State<MoveItemModal> {
       if (amountToMove == actualAmount) {
         await supabase.from('products').update({
           'id_location': idDestinationProject,
+          'description': justification,
         }).eq('id', idActualItem);
         await supabase.from('movements').insert({
           'id_product': idActualItem,
@@ -90,16 +91,17 @@ class _MoveItemModalState extends State<MoveItemModal> {
       // - Scenery B: Partial movement
       else if (amountToMove > 0 && amountToMove < actualAmount) {
         // : 1. Clone the original item with the new values for the destination
-        final Map<String, dynamic> nuevoItem = Map<String, dynamic>.from(currentItem);
+        final Map<String, dynamic> newItem = Map<String, dynamic>.from(currentItem);
         
         // : Clean up fields that shouldn't be duplicated
-        nuevoItem.remove('id'); 
-        nuevoItem.remove('created_at');
+        newItem.remove('id');
+        newItem.remove('created_at');
         
         // : Set the new values for the cloned item
-        nuevoItem['id_location'] = idDestinationProject;
-        nuevoItem['quantity'] = amountToMove;
-
+        newItem['id_location'] = idDestinationProject;
+        newItem['description'] = justification;
+        newItem['quantity'] = amountToMove;
+        
         // - 2. Execute both operations in a transaction-like manner
         // : Use the future returned by the insert to get the new item's ID for the movement record
         await Future.wait([
@@ -108,7 +110,7 @@ class _MoveItemModalState extends State<MoveItemModal> {
           }).eq('id', idActualItem),
           
           // : We insert the new item and then use its ID for the movement record
-          supabase.from('products').insert(nuevoItem),
+          supabase.from('products').insert(newItem),
         ]);
       }
 
