@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MoveItemModal extends StatefulWidget {
@@ -21,6 +22,7 @@ class MoveItemModal extends StatefulWidget {
 class _MoveItemModalState extends State<MoveItemModal> {
   String? _selectedProjectId;
   late int  _amountToMove;
+  late TextEditingController _amountController;
   late int _maxAmount;
   final TextEditingController _justificationController = TextEditingController();
   bool _isLoading = false;
@@ -30,64 +32,72 @@ class _MoveItemModalState extends State<MoveItemModal> {
     super.initState();
     _maxAmount = widget.item['quantity'] ?? 0;
     _amountToMove = 1; 
+    _amountController = TextEditingController(text: _amountToMove.toString());
   }
 
   @override
   void dispose() {
     _justificationController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
   void _incrementar() {
     if (_amountToMove < _maxAmount) {
-      setState(() => _amountToMove++);
+      setState(() {
+        _amountToMove++;
+        _amountController.text = _amountToMove.toString();
+      });
     }
   }
 
-  void _decrementar() {
+  void _decrementar() { 
     if (_amountToMove > 1) {
-      setState(() => _amountToMove--);
+      setState(() {
+        _amountToMove--;
+        _amountController.text = _amountToMove.toString();
+      });
     }
   }
 
   Future<void> moveMaterial({
-    required Map<String, dynamic> itemActual,
-    required String idProyectoDestino,
+    required Map<String, dynamic> currentItem,
+    required String idDestinationProject,
     required int amountToMove,
-    required String justificacion,
+    required String justification,
   })
 
   async {
     final supabase = Supabase.instance.client;
-    final int actualAmount = itemActual['quantity'];
-    final String idActualItem = itemActual['id'];
+    final int actualAmount = currentItem['quantity'];
+    final String idActualItem = currentItem['id'];
 
     try {
       // - Scenery A: Total movement
       if (amountToMove == actualAmount) {
         await supabase.from('products').update({
-          'id_location': idProyectoDestino,
+          'id_location': idDestinationProject,
         }).eq('id', idActualItem);
         await supabase.from('movements').insert({
           'id_product': idActualItem,
           'from_location': widget.currentProjectId,
-          'to_location': idProyectoDestino,
+          'to_location': idDestinationProject,
           'quantity': amountToMove,
-          'justification': justificacion,
+          'justification': justification,
         });
         
       } 
       // - Scenery B: Partial movement
       else if (amountToMove > 0 && amountToMove < actualAmount) {
         // : 1. Clone the original item with the new values for the destination
-        final Map<String, dynamic> nuevoItem = Map<String, dynamic>.from(itemActual);
+        final Map<String, dynamic> nuevoItem = Map<String, dynamic>.from(currentItem);
         
         // : Clean up fields that shouldn't be duplicated
         nuevoItem.remove('id'); 
         nuevoItem.remove('created_at');
         
         // : Set the new values for the cloned item
-        nuevoItem['id_location'] = idProyectoDestino;
+        nuevoItem['id_location'] = idDestinationProject;
         nuevoItem['quantity'] = amountToMove;
 
         // - 2. Execute both operations in a transaction-like manner
@@ -191,12 +201,38 @@ class _MoveItemModalState extends State<MoveItemModal> {
                               icon: const Icon(Icons.remove, color: Colors.amber),
                               onPressed: _decrementar,
                             ),
-                            Text(
-                              '$_amountToMove / $_maxAmount',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 80,
+                              child: TextField(
+                                controller: _amountController,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none, 
+                                  suffixText: '/ $_maxAmount', 
+                                  suffixStyle: const TextStyle(color: Colors.white54, fontSize: 14),
+                                ),
+                                onChanged: (value) {
+                                  int val = int.tryParse(value) ?? 0;
+
+                                  if (val > _maxAmount) {
+                                    val = _maxAmount;
+                                    _amountController.text = val.toString();
+                                    _amountController.selection = TextSelection.fromPosition(
+                                      TextPosition(offset: _amountController.text.length),
+                                    );
+                                  }
+                                  setState(() => _amountToMove = val);
+                                },
                               ),
                             ),
                             IconButton(
@@ -204,7 +240,7 @@ class _MoveItemModalState extends State<MoveItemModal> {
                               onPressed: _incrementar,
                             ),
                           ],
-                        ),
+                        )
                       ),
                     ],
                   ),
@@ -266,10 +302,10 @@ class _MoveItemModalState extends State<MoveItemModal> {
                             setState(() => _isLoading = true);
 
                             await moveMaterial(
-                              itemActual: widget.item,
-                              idProyectoDestino: _selectedProjectId!,
+                              currentItem: widget.item,
+                              idDestinationProject: _selectedProjectId!,
                               amountToMove: _amountToMove,
-                              justificacion: _justificationController.text.trim(),
+                              justification: _justificationController.text.trim(),
                             );
                             
                             if (mounted) {
