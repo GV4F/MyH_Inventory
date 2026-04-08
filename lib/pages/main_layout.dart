@@ -17,7 +17,6 @@ class _MainLayoutState extends State<MainLayout> {
   final _supabase = Supabase.instance.client;
   //: Controllers for the "Add Project" form
   final TextEditingController _nameProject = TextEditingController();
-  final TextEditingController _categoryProject = TextEditingController();
   final TextEditingController _descriptionProject = TextEditingController();
   //: Controllers for the "Add Object" form
   final TextEditingController _nameObject = TextEditingController();
@@ -29,7 +28,6 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void dispose() {
     _nameProject.dispose();
-    _categoryProject.dispose();
     _descriptionProject.dispose();
     super.dispose();
   }
@@ -38,10 +36,9 @@ class _MainLayoutState extends State<MainLayout> {
     setState(() { _isSaving = true; });
     try {
       final name = _nameProject.text.trim();
-      final category = _categoryProject.text.trim();
       final description = _descriptionProject.text.trim();
 
-      if (name.isEmpty || category.isEmpty || description.isEmpty) {
+      if (name.isEmpty || description.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Por favor, completa todos los campos.', style: TextStyle(color: Colors.redAccent)),
@@ -52,7 +49,6 @@ class _MainLayoutState extends State<MainLayout> {
       
       await _supabase.from('locations').insert({
         'name': name,
-        'category': category,
         'description': description,
       });
 
@@ -68,6 +64,8 @@ class _MainLayoutState extends State<MainLayout> {
       if(mounted) {
         setState(() { _isSaving = false; });
         Navigator.pop(context);
+        _nameProject.clear();
+        _descriptionProject.clear();
       }
     }
   }
@@ -152,17 +150,6 @@ class _MainLayoutState extends State<MainLayout> {
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Project Name',
-                  labelStyle: TextStyle(color: Colors.white70),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                controller: _categoryProject,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Category',
                   labelStyle: TextStyle(color: Colors.white70),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),

@@ -76,7 +76,12 @@ Widget build(BuildContext context) {
                   context.push('/project/${project['id']}');
                 },
                 isPrimary: project['priority'] == 1,
-                leftIcon: project['priority'] == 1 ? Icons.warehouse_rounded : null,
+                isSecondary: project['priority'] == 2,
+                leftIcon: switch (project['priority']) {
+                  1 => Icons.warehouse_rounded,
+                  2 => Icons.construction_rounded, 
+                  _ => null,
+                },
               ),
             );
           }),

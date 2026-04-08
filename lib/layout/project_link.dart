@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ProjectLink extends StatelessWidget {
   final String title;
   final bool isPrimary;
+  final bool isSecondary;
   final IconData? leftIcon;
   final VoidCallback onTap;
 
@@ -11,6 +12,7 @@ class ProjectLink extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.isPrimary = false,
+    this.isSecondary = false,
     this.leftIcon,
   });
 
@@ -26,14 +28,18 @@ class ProjectLink extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
           decoration: BoxDecoration(
-            color: isPrimary ? colors.primary : colors.secondary,
+            color: isPrimary 
+              ? colors.primary
+              : isSecondary 
+                ? Color(0xFFC61D24)
+              : colors.secondary,
             borderRadius: BorderRadius.circular(24.0),
             boxShadow: [
               BoxShadow(
-                color: Color(0x75434343), // Shadow color with opacity
-                offset: Offset(2, 4),                // Shadow position: right and down
-                blurRadius: 5,                       // Softness of the shadow
-                spreadRadius: 1,                     // Extend the shadow
+                color: Color(0x75434343), 
+                offset: Offset(2, 4),               
+                blurRadius: 5,                       
+                spreadRadius: 1,                    
               ),
             ],
           ),
@@ -42,7 +48,7 @@ class ProjectLink extends StatelessWidget {
               if (leftIcon != null) ...[
                 Icon(
                   leftIcon,
-                  color: isPrimary ? colors.surface : colors.tertiary,
+                  color: colors.surface,
                   size: 24.0,
                 ),
                 const SizedBox(width: 16.0),
@@ -51,9 +57,13 @@ class ProjectLink extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  textAlign: isPrimary ? TextAlign.center : TextAlign.left,
+                  textAlign: isPrimary || isSecondary ? TextAlign.center : TextAlign.left,
                   style: TextStyle(
-                    color: isPrimary ? colors.surface : colors.tertiary,
+                    color: isPrimary 
+                      ? colors.surface 
+                      : isSecondary 
+                        ? colors.surface
+                      : colors.tertiary,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -62,7 +72,11 @@ class ProjectLink extends StatelessWidget {
               const SizedBox(width: 16.0),
               Icon(
                 Icons.arrow_forward_ios,
-                color: isPrimary ? colors.surface : colors.tertiary,
+                color: isPrimary 
+                  ? colors.surface 
+                  : isSecondary 
+                      ? colors.surface
+                  : colors.tertiary,
                 size: 18.0,
               ),
             ],
