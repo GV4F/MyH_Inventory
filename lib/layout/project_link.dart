@@ -36,8 +36,8 @@ class ProjectLink extends StatelessWidget {
             borderRadius: BorderRadius.circular(24.0),
             boxShadow: [
               BoxShadow(
-                color: Color(0x75434343), 
-                offset: Offset(2, 4),               
+                color: Color(0xFF000000), 
+                offset: Offset(2, 5),               
                 blurRadius: 5,                       
                 spreadRadius: 1,                    
               ),
