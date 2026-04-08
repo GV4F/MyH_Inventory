@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'project_item.dart'; 
 import 'dart:async';
 import 'dart:ui';
+import 'package:intl/intl.dart';
 
 import 'modal_edit.dart';
 
@@ -79,6 +80,13 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
       },
     );
   }
+
+  String formatSupabaseDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
   // - ON MORE
   void moreItem(BuildContext context, Map<String, dynamic> item) {
   showDialog(
@@ -148,7 +156,7 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
                   const SizedBox(height: 12),
                   _buildDetailRow(Icons.notes, 'Descripción', item['description'] ?? 'Sin descripción extra'),
                   const SizedBox(height: 12),
-                  _buildDetailRow(Icons.calendar_today, 'Añadido', item['created_at'] ?? 'N/A'),
+                  _buildDetailRow(Icons.calendar_today, 'Añadido', formatSupabaseDate(item['created_at'] ?? 'N/A')),
 
                   const SizedBox(height: 20),
                   
