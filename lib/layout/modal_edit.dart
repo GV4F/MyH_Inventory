@@ -137,10 +137,10 @@ class _MoveItemModalState extends State<MoveItemModal> {
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF151515).withOpacity(0.9),
+              color: const Color(0xFF151515).withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: const Color(0xFFFCCC3E).withOpacity(0.3),
+                color: const Color(0xFFFCCC3E).withValues(alpha: 0.3),
                 width: 1.5,
               ),
             ),
