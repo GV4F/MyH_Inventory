@@ -21,6 +21,7 @@ class _MainLayoutState extends State<MainLayout> {
   //: Controllers for the "Add Object" form
   final TextEditingController _nameObject = TextEditingController();
   final TextEditingController _categoryObject = TextEditingController();
+  final TextEditingController _descriptionObject = TextEditingController();
   final TextEditingController _unitMeasurement = TextEditingController();
   final TextEditingController _quantityObject = TextEditingController();
   bool _isSaving = false;
@@ -75,6 +76,7 @@ class _MainLayoutState extends State<MainLayout> {
     try {
       final name = _nameObject.text.trim();
       final category = _categoryObject.text.trim();
+      final description = _descriptionObject.text.trim();
       final unitMeasurement = _unitMeasurement.text.trim();
       final quantity = int.tryParse(_quantityObject.text.trim()) ?? 0;
 
@@ -90,6 +92,7 @@ class _MainLayoutState extends State<MainLayout> {
       await _supabase.from('products').insert({
         'name': name,
         'category': category,
+        'description': description,
         'unit_measurement': unitMeasurement,
         'quantity': quantity,
         'id_location': projectId,
@@ -110,6 +113,7 @@ class _MainLayoutState extends State<MainLayout> {
       }
       _nameObject.clear();
       _categoryObject.clear();
+      _descriptionObject.clear();
       _quantityObject.clear();
       _unitMeasurement.clear();
     }
@@ -220,6 +224,18 @@ class _MainLayoutState extends State<MainLayout> {
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Nombre del Objeto',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              // : Object Description Field
+              TextField(
+                controller: _descriptionObject,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Descripción del Objeto',
                   labelStyle: TextStyle(color: Colors.white70),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
