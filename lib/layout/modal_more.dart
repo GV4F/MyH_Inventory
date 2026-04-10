@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MoreModal extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -33,6 +34,7 @@ class _MoreModalState extends State<MoreModal> {
   }
 
   void _decrease() {
+    if (_amount == 0) return;
     setState(() {
       _amount--;
       _amountController.text = _amount.toString();
@@ -40,16 +42,38 @@ class _MoreModalState extends State<MoreModal> {
   }
 
   void _increase() {
-    if (_amount == 0) return;
     setState(() {
       _amount++;
       _amountController.text = _amount.toString();
     });
   }
 
+  Future<void> _updateQuantity({
+    required int amount,
+    required Map<String, dynamic> item,
+  }) async {
+     
+    final supabase = Supabase.instance.client;
+     
+    try {
+      if(amount == 0) {
+      await supabase.from('products').delete().eq('id', item['id']);
+     } else {
+      await supabase.from('products').update({'quantity': amount}).eq('id', item['id']);
+     }
+    } catch(e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al actualizar cantidad: $e'))
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
 
     return Dialog(
         backgroundColor: Colors.transparent,
@@ -123,7 +147,44 @@ class _MoreModalState extends State<MoreModal> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Modificar:', style: TextStyle(color: Colors.white70)),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colors.primary,
+                            foregroundColor: colors.surface,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+
+                            if(_amount == widget.item['quantity']) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('No se realizaron cambios'))
+                              );
+                              return;
+                            }
+                            if(_amount != widget.item['quantity']) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Cantidad modificada a $_amount'))
+                              );
+                            }
+                            if(_amount == 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Producto eliminado del inventario'))
+                              );
+                            }
+                            _updateQuantity(
+                              amount: _amount,
+                              item: widget.item,
+                            );
+                          },
+                          child: const Text('Modificar', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                        )
+                      ),
+                      SizedBox(width: 20),
                       Container(
                         decoration: BoxDecoration(
                           color: const Color(0xFF212121),
