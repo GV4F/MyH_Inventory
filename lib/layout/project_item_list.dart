@@ -145,6 +145,8 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
         return Color(0xFFFFEA00);
       case 'material':
         return Color(0xFFC1C1C1);
+      case 'maquinaria':
+        return Color(0xFF3A0066);
       default:
         return Colors.teal; 
     }

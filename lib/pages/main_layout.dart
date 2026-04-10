@@ -245,7 +245,7 @@ class _MainLayoutState extends State<MainLayout> {
               // : Category Dropdown
               DropdownButtonFormField<String>(
                 initialValue: _categoryObject.text.isEmpty ? null : _categoryObject.text,
-                items: ['Herramienta', 'Material', 'Fontanería', 'Electricidad', 'Maquinaria'].map((category) {
+                items: ['Herramienta', 'Material', 'Fontanería', 'Electricidad', 'Maquinaria', 'Otro'].map((category) {
                   return DropdownMenuItem<String>(
                     value: category,
                     child: Text(category, style: TextStyle(color: Colors.white)),
