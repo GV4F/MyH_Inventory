@@ -18,11 +18,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   AuthTab _currentState = AuthTab.login;
-  FocusNode _userFocus = FocusNode();
+  // FocusNode _userFocus = FocusNode();
 
   @override
   void dispose() {
-    _userFocus.dispose();
+    // _userFocus.dispose();
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -261,7 +261,28 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-              )
+              ),
+
+              const Spacer(),
+              // : 4. Action button
+              ElevatedButton(
+                onPressed: _currentState == AuthTab.login ? _signIn : _signUp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colors.secondary,
+                  padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  _currentState == AuthTab.login ? 'Ingresar' : 'Registrar',
+                  style: TextStyle(
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                    color: colors.tertiary
+                  ),
+                ),
+              ),
             ],
           ),
         )
