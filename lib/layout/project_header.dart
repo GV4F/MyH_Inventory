@@ -136,11 +136,11 @@ class _HeaderSectionState extends State<ProjectHeader> {
         color: Color(0xFF0A2463),
       ),
       child: SafeArea(
-        bottom: false, // Solo respeta el notch/barra de estado arriba
+        bottom: false, 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- FILA 1: Título y Usuario ---
+            // --- First Row: Title and User ---
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -175,7 +175,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
             
             const SizedBox(height: 20),
 
-            // --- FILA 2: Buscador y Filtro ---
+            // --- Second Row: Search and Filter ---
             Row(
               children: [
                 // Barra de búsqueda (Expanded para que tome todo el ancho posible)
