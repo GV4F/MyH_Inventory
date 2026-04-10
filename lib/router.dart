@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import './pages/main_layout.dart';
 import './pages/home_page.dart';
 import './pages/project_page.dart';
-import './pages/user_page.dart';
+import 'auth/auth_gate.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/', // - Home: Initial route
@@ -34,7 +34,7 @@ final GoRouter appRouter = GoRouter(
         // : 3 User Profile Screen
         GoRoute(
           path: '/profile',
-          builder: (context, state) => const UserPage(),
+          builder: (context, state) => const AuthGate(),
         ),
       ],
     )
