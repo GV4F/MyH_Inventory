@@ -70,6 +70,16 @@ class _MoreModalState extends State<MoreModal> {
     }
   }
 
+  Future<String> _getNameofUser() async {
+    final supabase = Supabase.instance.client;
+    try {
+      final data = await supabase.from('profiles').select('username').eq('id', widget.item['id_user']).single();
+      return data['username'] ?? 'Usuario desconocido';
+    } catch(e) {
+      return 'Error';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -241,16 +251,35 @@ class _MoreModalState extends State<MoreModal> {
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.person, color: Color(0xFF40E0D0), size: 16),
                         SizedBox(width: 8),
-                        Text(
-                          'Añadido por: GVAF',
-                          style: TextStyle(
-                            color: Color(0xFF40E0D0),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
+                        FutureBuilder<String>(
+                          future: _getNameofUser(),
+                          builder: (context, snapshot) {
+                            if(snapshot.connectionState == ConnectionState.waiting) {
+                              return const Text(
+                                'Cargando...', 
+                                style: TextStyle(color: Color(0xFF40E0D0), 
+                                fontStyle: FontStyle.italic, fontSize: 14)
+                              );
+                            }
+                            
+                            if(snapshot.hasError) {
+                              return const Text(
+                                'Error al cargar usuario',
+                                style: TextStyle(color: Color(0xFFE04075), fontStyle: FontStyle.italic, fontSize: 14)
+                              );
+                            }
+                            return Text(
+                              'Añadido por: ${snapshot.data ?? 'Usuario desconocido'}',
+                              style: const TextStyle(
+                                color: Color(0xFF40E0D0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
