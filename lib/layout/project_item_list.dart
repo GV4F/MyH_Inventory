@@ -55,7 +55,11 @@ class _ItemsListContainerState extends State<ItemsListContainer> {
           projects = response as List<dynamic>;
         });
     } catch (e) {
-      print('Error fetching projects: $e');
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     }
   }
 

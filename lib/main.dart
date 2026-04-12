@@ -13,14 +13,14 @@ void main() async {
     anonKey: EnvConfig.anonKey,
   );
 
-  final session = Supabase.instance.client.auth.currentSession;
-  if (session != null) {
-    print("Sesión activa desde el arranque: ${session.user.id}");
-  }
+  // final session = Supabase.instance.client.auth.currentSession;
+  // if (session != null) {
+  //   print("Sesión activa desde el arranque: ${session.user.id}");
+  // }
 
-  Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-    print("Cambio de estado detectado: ${data.event}");
-  });
+  // Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+  //   print("Cambio de estado detectado: ${data.event}");
+  // });
   
   runApp(const MainApp());
 }

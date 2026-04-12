@@ -60,7 +60,11 @@ class _MainLayoutState extends State<MainLayout> {
       }
 
     } catch (e) {
-      print('Error inserting data: $e');
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     } finally {
       if(mounted) {
         setState(() { _isSaving = false; });
@@ -105,7 +109,11 @@ class _MainLayoutState extends State<MainLayout> {
       }
 
     } catch (e) {
-      print('Error inserting data: $e');
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error inserting data: $e')),
+        );
+      }
     } finally {
       if(mounted) {
         setState(() { _isSaving = false; });

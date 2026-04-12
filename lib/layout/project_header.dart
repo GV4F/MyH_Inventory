@@ -196,9 +196,10 @@ class _HeaderSectionState extends State<ProjectHeader> {
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       ),
-                      onChanged: (value) {
-                        print('Buscando: $value');
-                      },
+                      // ! Implementar búsqueda en tiempo real
+                      // onChanged: (value) {
+                      //   print('Buscando: $value');
+                      // },
                     ),
                   ),
                 ),

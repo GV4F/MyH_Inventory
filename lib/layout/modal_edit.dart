@@ -115,7 +115,11 @@ class _MoveItemModalState extends State<MoveItemModal> {
       }
 
     } catch (e) {
-      print('Error crítico moviendo material: $e');
+      if(mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     }
   }
 
