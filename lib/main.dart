@@ -6,18 +6,27 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'utils/env.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   
   await Supabase.initialize(
     url: EnvConfig.url,
     anonKey: EnvConfig.anonKey,
   );
+
+  final session = Supabase.instance.client.auth.currentSession;
+  if (session != null) {
+    print("Sesión activa desde el arranque: ${session.user.id}");
+  }
+
+  Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    print("Cambio de estado detectado: ${data.event}");
+  });
+  
   runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({super.key});  
 
   @override
   Widget build(BuildContext context) {

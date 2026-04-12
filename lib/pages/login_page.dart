@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         UserHeader(
-          content: 'Bienvenido a MyH Solitions',
+          content: 'Bienvenido a MyH Solutions',
           isAuth: false,
         ),
         Expanded(
@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: colors.surface,
-                borderRadius: BorderRadius.vertical(
+                borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(40.0),
                 ),
                 boxShadow: [
@@ -111,189 +111,194 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // : 1. Tab selector (Login / Register)
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF212121),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: Colors.white10,
-                          width: 0.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 10,
-                            spreadRadius: 2,
-                            offset: const Offset(0, 4),
+                // : Added SingleChildScrollView to prevent button overflow when keyboard appears
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // : 1. Tab selector (Login / Register)
+                      Container(
+                        width: double.infinity,
+                        height: 60,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF212121),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: Colors.white10,
+                            width: 0.5,
                           ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          AnimatedAlign(
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeInOut,
-                            alignment: _currentState == AuthTab.login
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            child: FractionallySizedBox(
-                              widthFactor: 0.5,
-                              heightFactor: 1.0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: colors.secondary,
-                                  borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeInOut,
+                              alignment: _currentState == AuthTab.login
+                                  ? Alignment.centerLeft
+                                  : Alignment.centerRight,
+                              child: FractionallySizedBox(
+                                widthFactor: 0.5,
+                                heightFactor: 1.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: colors.secondary,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
 
-                          // : 2. Text (static labels)
-                          Positioned.fill(
-                            child: Row(
-                              children: [
-                                // : Log in (left)
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () => _onTabChanged(AuthTab.login),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(30),
-                                      bottomLeft: Radius.circular(30),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Ingresar',
-                                        style: TextStyle(
-                                          color: _currentState == AuthTab.login
-                                              ? Colors.white
-                                              : Colors.white54,
-                                          fontSize: 18,
-                                          fontWeight: _currentState == AuthTab.login
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
+                            // : 2. Text (static labels)
+                            Positioned.fill(
+                              child: Row(
+                                children: [
+                                  // : Log in (left)
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () => _onTabChanged(AuthTab.login),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        bottomLeft: Radius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Ingresar',
+                                          style: TextStyle(
+                                            color: _currentState == AuthTab.login
+                                                ? Colors.white
+                                                : Colors.white54,
+                                            fontSize: 18,
+                                            fontWeight: _currentState == AuthTab.login
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
 
-                                // Pestaña 'Crear Cuenta' (Derecha)
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () => _onTabChanged(AuthTab.register),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(30),
-                                      bottomRight: Radius.circular(30),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Crear Cuenta',
-                                        style: TextStyle(
-                                          color: _currentState == AuthTab.register
-                                              ? Colors.white
-                                              : Colors.white54, // Texto dimmer si inactivo
-                                          fontSize: 18,
-                                          fontWeight: _currentState == AuthTab.register
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
+                                  // : Register Tab (Right)
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () => _onTabChanged(AuthTab.register),
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(30),
+                                        bottomRight: Radius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Crear Cuenta',
+                                          style: TextStyle(
+                                            color: _currentState == AuthTab.register
+                                                ? Colors.white
+                                                : Colors.white54, 
+                                            fontSize: 18,
+                                            fontWeight: _currentState == AuthTab.register
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    const SizedBox(height: 32),
-                    
-                    // : 3. Form fields
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1A1A1A), 
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.05),
-                          width: 1,
+                          ],
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          // : USERNAME
-                          if(_currentState == AuthTab.register) ...[
+                      
+                      const SizedBox(height: 32),
+                      
+                      // : 3. Form fields
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A1A), 
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            width: 1,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            // : USERNAME
+                            if(_currentState == AuthTab.register) ...[
+                              TextField(
+                                controller: _usernameController,
+                                style: TextStyle(color: colors.tertiary),
+                                decoration: InputDecoration(
+                                  focusColor: colors.primary,
+                                  labelText: 'Nombre de usuario',
+                                  labelStyle: const TextStyle(color: Colors.white54),
+                                  prefixIcon: Icon(Icons.person_outline, color: colors.primary),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                            // : EMAIL
                             TextField(
-                              controller: _usernameController,
+                              controller: _emailController,
                               style: TextStyle(color: colors.tertiary),
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 focusColor: colors.primary,
-                                labelText: 'Nombre de usuario',
-                                labelStyle: TextStyle(color: Colors.white54),
-                                prefixIcon: Icon(Icons.person_outline, color: colors.primary),
+                                labelText: 'Correo electrónico',
+                                labelStyle: const TextStyle(color: Colors.white54),
+                                prefixIcon: Icon(Icons.email_outlined, color: colors.primary),
                               ),
                             ),
                             const SizedBox(height: 16),
+                            // : PASSWORD
+                            TextField(
+                              controller: _passwordController,
+                              style: TextStyle(color: colors.tertiary),
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                focusColor: colors.primary,
+                                labelText: 'Contraseña',
+                                labelStyle: const TextStyle(color: Colors.white54),
+                                prefixIcon: Icon(Icons.lock_outline, color: colors.primary),
+                              ),
+                            ),
                           ],
-                          // : EMAIL
-                          TextField(
-                            controller: _emailController,
-                            style: TextStyle(color: colors.tertiary),
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              focusColor: colors.primary,
-                              labelText: 'Correo electrónico',
-                              labelStyle: TextStyle(color: Colors.white54),
-                              prefixIcon: Icon(Icons.email_outlined, color: colors.primary),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          // : PASSWORD
-                          TextField(
-                            controller: _passwordController,
-                            style: TextStyle(color: colors.tertiary),
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              focusColor: colors.primary,
-                              labelText: 'Contraseña',
-                              labelStyle: TextStyle(color: Colors.white54),
-                              prefixIcon: Icon(Icons.lock_outline, color: colors.primary),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
 
-                    const Spacer(),
-                    // : 4. Action button
-                    ElevatedButton(
-                      onPressed: _currentState == AuthTab.login ? _signIn : _signUp,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.secondary,
-                        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                      // : Replaced Spacer() with SizedBox to avoid Flex errors inside ScrollView
+                      const SizedBox(height: 40),
+                      
+                      // : 4. Action button
+                      ElevatedButton(
+                        onPressed: _currentState == AuthTab.login ? _signIn : _signUp,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.secondary,
+                          padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          _currentState == AuthTab.login ? 'Ingresar' : 'Registrar',
+                          style: TextStyle(
+                            fontSize: 16, 
+                            fontWeight: FontWeight.bold, 
+                            color: colors.tertiary
+                          ),
                         ),
                       ),
-                      child: Text(
-                        _currentState == AuthTab.login ? 'Ingresar' : 'Registrar',
-                        style: TextStyle(
-                          fontSize: 16, 
-                          fontWeight: FontWeight.bold, 
-                          color: colors.tertiary
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )
             ),

@@ -130,6 +130,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       decoration: const BoxDecoration(
@@ -159,15 +160,15 @@ class _HeaderSectionState extends State<ProjectHeader> {
                       color: Colors.white,
                       size: 28,
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'GVAF',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // const SizedBox(width: 8),
+                    // Text(
+                    //   widget.userName,
+                    //   style: const TextStyle(
+                    //     fontSize: 18,
+                    //     fontWeight: FontWeight.w600,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
@@ -178,12 +179,11 @@ class _HeaderSectionState extends State<ProjectHeader> {
             // --- Second Row: Search and Filter ---
             Row(
               children: [
-                // Barra de búsqueda (Expanded para que tome todo el ancho posible)
                 Expanded(
                   child: Container(
                     height: 45,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF151515), // Tu negro de fondo principal
+                      color: const Color(0xFF151515),
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: TextField(
@@ -212,7 +212,7 @@ class _HeaderSectionState extends State<ProjectHeader> {
                     height: 45,
                     width: 45,
                     decoration: BoxDecoration(
-                      color: Colors.transparent, // Fondo transparente
+                      color: Colors.transparent, 
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
